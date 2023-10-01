@@ -77,11 +77,22 @@ def get_neighbours(pos):
 def main():
     running = True
     playing = False
+    count = 0
+    update_freq = 120
 
     positions = set()
 
     while running:
         clock.tick(FPS)
+
+        if playing:
+            count += 1
+
+        if count >= update_freq:
+            count = 0
+            positions = adjust_grid(positions)
+
+        pygame.display.set_caption("Playing" if playing else "Paused")
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -102,6 +113,7 @@ def main():
                 if event.key == pygame.K_c:
                     positions = set()
                     playing = False
+                    count = 0
                 if event.key == pygame.K_g:
                     positions = gen(random.randrange(2, 5) * GRID_WIDTH)
 
